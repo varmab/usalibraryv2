@@ -7,13 +7,14 @@ import {
 class MyBooks extends Component{
     constructor(){
         super();
+        console.log("userId:" + localStorage.getItem("userId"))
         this.state={
-            userLoggedIn:false
+            userId:localStorage.getItem("userId")
         }
         
     }
     render(){
-        if(!this.state.userLoggedIn){
+        if(this.state.userId==""){
             return (
                 <Redirect to="/login"/>
             )

@@ -6,31 +6,57 @@ class Library extends React.Component{
     constructor(){
         super();
 
-        var books=[
-            {
-                id:1,
-                title:"JavaScript Fundamentals"
-            },
-            {
-                id:2,
-                title:"Node Advanced"
-            },
-            {
-                id:3,
-                title:"React Intermediate"
-            }
-        ]
-
         this.state={
-            books,
-            wishlist:[]
+            books:[],
+            wishlist:[],
+            loaded:false,
+            errored:false
         }
 
         this.addToWishlist=this.addToWishlist.bind(this);
         this.search=this.search.bind(this);
+        this.getBooks=this.getBooks.bind(this);
+        this.searchBooks=this.searchBooks.bind(this)
+    }
+
+    getBooks(){
+        var url="/api/books";
+
+        fetch(url)
+        .then((response)=>response.json())
+        .then((books)=>{
+            this.setState({
+                books:this.state.books.concat(books),
+                loaded:true,
+            })
+        })
+        .catch((err)=>{
+            this.setState({
+                errored:true
+            })
+        })
+    }
+
+    searchBooks(term){
+        var url="/api/books/search/" +  term;
+
+        fetch(url)
+        .then((response)=>response.json())
+        .then((books)=>{
+            this.setState({
+                books:books,
+                loaded:true,
+            })
+        })
+        .catch((err)=>{
+            this.setState({
+                errored:true
+            })
+        })
     }
 
     addToWishlist(book){
+
         this.setState({
             wishlist:[
                         ...this.state.wishlist, book
@@ -40,20 +66,20 @@ class Library extends React.Component{
 
     search(term){
         console.log("term in library:" +  term)
-        //
-        this.setState({
-            books:this.state.books.filter((book)=>book.title.indexOf(term)!=-1)
-        })
+        this.searchBooks(term);
     }
 
     render(){
         return (
             <div>
-                My wishlist:{this.state.wishlist.length}
                 <Search search={this.search}/>
                 <BookList books={this.state.books} addToWishlist={this.addToWishlist}/>
             </div>
         )
+    }
+
+    componentDidMount(){
+        this.getBooks();
     }
 }
 

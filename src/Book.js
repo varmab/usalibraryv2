@@ -20,8 +20,21 @@ class Book extends React.Component{
     render(){
         return (
             <React.Fragment>
-                <h3>{this.state.book.title}</h3>
-                <button onClick={this.addToWishlist}>Add</button>
+                
+                <div className="col-md-4">
+                    <div className="card mb-4 box-shadow">
+                        <div className="card-body">
+                        <p className="card-text">{this.state.book.title}</p>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <div className="btn-group">
+                            <button type="button" className="btn btn-sm btn-outline-secondary">View</button>
+                            <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
+                            </div>
+                            <small className="text-muted"></small>
+                        </div>
+                        </div>
+                    </div>
+                </div>
             </React.Fragment>
         )
     }
